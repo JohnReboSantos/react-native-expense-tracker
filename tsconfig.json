@@ -1,6 +1,10 @@
 {
   "extends": "expo/tsconfig.base",
   "compilerOptions": {
+    "target": "ES2015",
+    "experimentalDecorators": true,
+    // MobX 5/6
+    "useDefineForClassFields": true,
     "strict": true
   }
 }
