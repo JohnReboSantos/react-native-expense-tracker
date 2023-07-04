@@ -35,6 +35,19 @@ const ExpenseForm = () => {
     const onSubmit = () => {
        setFormData({...formData, date: selectedDate.toString()});
        alert(`Amount: ${formData.amount}. Name: ${formData.name}. Description: ${formData.description}. Category: ${formData.category}. Date: ${formData.date}`)
+       
+       if (formData.amount === 0) {
+        alert('Amount is required');
+        setFormData({amount: 0, name: '', description: '', category: '', date: ''});
+        return;
+       }
+       
+       if (formData.name.trim().length === 0) {
+        alert('Name is required');
+        setFormData({amount: 0, name: '', description: '', category: '', date: ''});
+        return;
+       }
+       
        setFormData({amount: 0, name: '', description: '', category: '', date: ''});
     }
 
