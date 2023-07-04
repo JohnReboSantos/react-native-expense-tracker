@@ -3,9 +3,11 @@ import DateTimePicker, { DateTimePickerEvent } from "@react-native-community/dat
 import React, { useState } from "react";
 import { observer } from 'mobx-react-lite'
 import { TouchableOpacity } from "react-native-gesture-handler";
+import { useStore } from "../stores";
 
 const ExpenseForm = () => {
-    const [formData, setFormData] = useState({amount: 0, name: '', description: '', category: '', date: ''})
+    const { expenseStore } = useStore();
+    const [formData, setFormData] = useState({amount: 0, name: '', description: '', category: '', date: new Date().toDateString()})
     const [selectedDate, setSelectedDate] = useState(new Date())
     const [showPicker, setShowPicker] = useState(false);
 
@@ -15,12 +17,11 @@ const ExpenseForm = () => {
 
     const onChange = ( {type} : DateTimePickerEvent, chosenDate: Date | undefined ) => {
         if (type == "set") {
-            const currentDate = chosenDate;
-            setSelectedDate(currentDate || new Date());
+            setSelectedDate(chosenDate || new Date());
 
             if (Platform.OS === 'android') {
                 toggleDatepicker();
-                setFormData({...formData, date: currentDate?.toDateString() || ''})
+                setFormData({...formData, date: selectedDate.toDateString() || new Date().toDateString()})
             }
         } else {
             toggleDatepicker();
@@ -33,29 +34,29 @@ const ExpenseForm = () => {
     };
 
     const onSubmit = () => {
-       setFormData({...formData, date: selectedDate.toString()});
-       alert(`Amount: ${formData.amount}. Name: ${formData.name}. Description: ${formData.description}. Category: ${formData.category}. Date: ${formData.date}`)
-       
+              
        if (formData.amount === 0) {
         alert('Amount is required');
-        setFormData({amount: 0, name: '', description: '', category: '', date: ''});
+        setFormData({amount: 0, name: '', description: '', category: '', date: new Date().toDateString()});
         return;
        }
        
        if (formData.name.trim().length === 0) {
         alert('Name is required');
-        setFormData({amount: 0, name: '', description: '', category: '', date: ''});
+        setFormData({amount: 0, name: '', description: '', category: '', date: new Date().toDateString()});
         return;
        }
        
-       setFormData({amount: 0, name: '', description: '', category: '', date: ''});
+       expenseStore.addExpense(formData.amount, formData.name, formData.description, formData.category, formData.date);
+       alert(`Expense successfully added! Amount: ${formData.amount}. Name: ${formData.name}. Description: ${formData.description}. Category: ${formData.category}. Date: ${formData.date}`)
+       setFormData({amount: 0, name: '', description: '', category: '', date: new Date().toDateString()});
     }
 
     return (
         <SafeAreaView>
            <TextInput style={styles.input} placeholder='Amount' value={formData.amount.toString()} onChangeText={e => setFormData({...formData, amount: parseInt(e) || 0})}/>
            <TextInput style={styles.input} placeholder='Name' value={formData.name} onChangeText={e => setFormData({...formData, name: e})}/>
-           <TextInput style={styles.input} placeholder='Description' multiline numberOfLines={4} value={formData.description} onChangeText={e => setFormData({...formData, description: e})}/>
+           <TextInput style={[styles.input, { height: 80 }]} placeholder='Description' multiline value={formData.description} onChangeText={e => setFormData({...formData, description: e})}/>
            <TextInput style={styles.input} placeholder='Category' value={formData.category} onChangeText={e => setFormData({...formData, category: e})}/>
            {showPicker && (<DateTimePicker mode='date' display='spinner' value={selectedDate} onChange={onChange} style={styles.datePicker} />)}
            

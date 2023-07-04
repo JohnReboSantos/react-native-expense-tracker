@@ -13,6 +13,7 @@ export default class ExpenseStore extends Model({
         const id = uuidv4();
         const expense = new Expense({id, amount, name, description, category, date});
         this.expenses.set(expense.id, expense);
+        console.log('this.expenses', this.expenses);
     };
 
     @modelAction
