@@ -4,7 +4,7 @@ import React, { useState } from "react";
 import { observer } from 'mobx-react-lite'
 import { TouchableOpacity } from "react-native-gesture-handler";
 
-export const ExpenseList = () => {
+const ExpenseForm = () => {
     const [formData, setFormData] = useState({amount: 0, name: '', description: '', category: '', date: ''})
     const [selectedDate, setSelectedDate] = useState(new Date())
     const [showPicker, setShowPicker] = useState(false);
@@ -97,3 +97,5 @@ const styles = StyleSheet.create({
         paddingHorizontal: 20
       }
 })
+
+export default observer(ExpenseForm);
