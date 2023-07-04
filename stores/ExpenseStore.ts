@@ -9,7 +9,7 @@ export default class ExpenseStore extends Model({
     expenses: prop(() => objectMap<Expense>())
 }) {
     @modelAction
-    addExpense = (amount: number, name: string, description: string, category: string, date: Date) => {
+    addExpense = (amount: number, name: string, description: string, category: string, date: string) => {
         const id = uuidv4();
         const expense = new Expense({id, amount, name, description, category, date});
         this.expenses.set(expense.id, expense);

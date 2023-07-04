@@ -7,10 +7,10 @@ export default class Expense extends Model({
     name: prop<string>(''),
     description: prop<string>(''),
     category: prop<string>(''),
-    date: prop<Date>(() => new Date())
+    date: prop<string>('')
 }) {
     @modelAction
-    edit = (amount: number, name: string, description: string, category: string, date: Date) => {
+    edit = (amount: number, name: string, description: string, category: string, date: string) => {
         this.amount = amount;
         this.name = name;
         this.description = description;
