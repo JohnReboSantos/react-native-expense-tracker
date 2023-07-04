@@ -35,6 +35,7 @@ export const ExpenseList = () => {
     const onSubmit = () => {
        setFormData({...formData, date: selectedDate.toString()});
        alert(`Amount: ${formData.amount}. Name: ${formData.name}. Description: ${formData.description}. Category: ${formData.category}. Date: ${formData.date}`)
+       setFormData({amount: 0, name: '', description: '', category: '', date: ''});
     }
 
     return (
@@ -62,7 +63,7 @@ export const ExpenseList = () => {
            )}
 
            {!showPicker && (<Pressable onPress={toggleDatepicker}>
-            <TextInput style={styles.input} editable={false} onPressIn={toggleDatepicker} placeholder='Date' value={formData.date} onChangeText={e => setFormData({...formData, date: e})}/>
+            <TextInput style={[styles.input, { color: formData.date === '' ? 'gray' : 'black' }]} editable={false} onPressIn={toggleDatepicker} placeholder='Date' value={formData.date} onChangeText={e => setFormData({...formData, date: e})}/>
            </Pressable>)}
            <TouchableOpacity style={styles.button} onPress={onSubmit}>
             <Text>Submit</Text>
