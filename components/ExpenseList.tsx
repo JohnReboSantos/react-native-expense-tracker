@@ -63,7 +63,7 @@ export const ExpenseList = () => {
            )}
 
            {!showPicker && (<Pressable onPress={toggleDatepicker}>
-              
+            <TextInput style={styles.input} editable={false} onPressIn={toggleDatepicker} placeholder='Date' value={formData.date} onChangeText={e => setFormData({...formData, date: e})}/>
            </Pressable>)}
            <TouchableOpacity style={styles.button} onPress={() => onSubmit}>
             <Text>Submit</Text>
