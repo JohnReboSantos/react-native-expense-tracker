@@ -23,6 +23,28 @@ export default class ExpenseStore extends Model({
   };
 
   @modelAction
+  editExpense = (
+    id: string,
+    amount: number,
+    name: string,
+    description: string,
+    category: string,
+    date: string
+  ) => {
+    if (!this.expenses.has(id)) {
+      return;
+    }
+    const expense = this.expenses.get(id);
+    if (expense) {
+      expense.amount = amount;
+      expense.name = name;
+      expense.description = description;
+      expense.category = category;
+      expense.date = date;
+    }
+  };
+
+  @modelAction
   deleteExpense = (id: string) => {
     if (!this.expenses.has(id)) {
       return;
