@@ -25,8 +25,8 @@ export default function App() {
     <StoreProvider value={store}>
       <NavigationContainer>
         <Drawer.Navigator>
-          <Drawer.Screen name="ExpenseForm" component={ExpenseForm} />
           <Drawer.Screen name="ExpenseList" component={ExpenseList} />
+          <Drawer.Screen name="ExpenseForm" component={ExpenseForm} />
           <Drawer.Screen name="ExpenseDetail" component={ExpenseDetail} />
           <Drawer.Screen name="ExpenseEdit" component={ExpenseEdit} />
         </Drawer.Navigator>

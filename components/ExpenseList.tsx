@@ -11,7 +11,16 @@ import { useStore } from '../stores';
 const ExpenseList = () => {
   const navigation = useNavigation();
   const { expenseStore } = useStore();
-  const [expenses, setExpenses] = useState({});
+  const [expenses, setExpenses] = useState<
+    {
+      id: string;
+      amount: number;
+      name: string;
+      description: string;
+      category: string;
+      date: string;
+    }[]
+  >([]);
 
   useEffect(() => {
     const expenseArray = Array.from(expenseStore.expenses.values());
@@ -25,27 +34,31 @@ const ExpenseList = () => {
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.header}>
-        <Text style={styles.totalExpenses}>Total Budget: </Text>
+        <Text style={styles.totalExpenses}>Total Budget: $ </Text>
         <TouchableOpacity onPress={navigateToExpenseForm} style={styles.addButton}>
           <AntDesign name="plus" size={24} color="white" />
         </TouchableOpacity>
       </View>
-      <FlatList
-        data={Array.from(expenseStore.expenses.values())}
-        renderItem={({ item }) => (
-          <ExpenseItem
-            id={item.id}
-            amount={item.amount}
-            name={item.name}
-            description={item.description}
-            category={item.category}
-            date={item.date}
-          />
-        )}
-        extraData={expenses}
-        keyExtractor={(item) => item.id.toString()}
-        style={styles.list}
-      />
+      {expenses.length === 0 ? (
+        <Text> Create your first entry! </Text>
+      ) : (
+        <FlatList
+          data={Array.from(expenseStore.expenses.values())}
+          renderItem={({ item }) => (
+            <ExpenseItem
+              id={item.id}
+              amount={item.amount}
+              name={item.name}
+              description={item.description}
+              category={item.category}
+              date={item.date}
+            />
+          )}
+          extraData={expenses}
+          keyExtractor={(item) => item.id.toString()}
+          style={styles.list}
+        />
+      )}
     </SafeAreaView>
   );
 };
