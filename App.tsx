@@ -1,16 +1,20 @@
 import 'react-native-gesture-handler';
 import { createDrawerNavigator } from '@react-navigation/drawer';
 import { NavigationContainer } from '@react-navigation/native';
+// import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import * as React from 'react';
-import { StyleSheet, Text, View } from 'react-native';
-import useInit from './hooks/useInit';
-import Loading from './components/Loading';
-import { StoreProvider } from './stores';
+
+import ExpenseDetail from './components/ExpenseDetail';
 import ExpenseForm from './components/ExpenseForm';
+import ExpenseList from './components/ExpenseList';
+import Loading from './components/Loading';
+import useInit from './hooks/useInit';
+import { StoreProvider } from './stores';
 
 export default function App() {
-  const {ready, store} = useInit();
+  const { ready, store } = useInit();
   const Drawer = createDrawerNavigator();
+  // const Stack = createNativeStackNavigator();
 
   if (!ready || !store) {
     return <Loading />;
@@ -18,20 +22,18 @@ export default function App() {
 
   return (
     <StoreProvider value={store}>
-    <NavigationContainer>
-      <Drawer.Navigator>
-      <Drawer.Screen name='Add an Expense' component={ExpenseForm} />
-      </Drawer.Navigator>
-    </NavigationContainer>
+      <NavigationContainer>
+        <Drawer.Navigator>
+          <Drawer.Screen name="ExpenseForm" component={ExpenseForm} />
+          <Drawer.Screen name="ExpenseList" component={ExpenseList} />
+          <Drawer.Screen name="ExpenseDetail" component={ExpenseDetail} />
+        </Drawer.Navigator>
+        {/* <Stack.Navigator>
+          <Stack.Screen name="ExpenseList" component={ExpenseList} />
+          <Stack.Screen name="ExpenseForm" component={ExpenseForm} />
+          <Stack.Screen name="ExpenseDetail" component={ExpenseDetail} />
+        </Stack.Navigator> */}
+      </NavigationContainer>
     </StoreProvider>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-});

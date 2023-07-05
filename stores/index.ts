@@ -1,7 +1,8 @@
-import { model, Model, prop, registerRootStore } from "mobx-keystone";
-import React from "react";
-import Store from "./Store";
-import ExpenseStore from "./ExpenseStore";
+import { registerRootStore } from 'mobx-keystone';
+import React from 'react';
+
+import ExpenseStore from './ExpenseStore';
+import Store from './Store';
 
 const StoreContext = React.createContext<Store>({} as Store);
 
@@ -9,14 +10,14 @@ const useStore = () => React.useContext(StoreContext);
 const { Provider: StoreProvider } = StoreContext;
 
 const createStore = () => {
-    const expenseStore = new ExpenseStore({});
-    const store = new Store({
-        expenseStore
-    });
+  const expenseStore = new ExpenseStore({});
+  const store = new Store({
+    expenseStore,
+  });
 
-    registerRootStore(store);
+  registerRootStore(store);
 
-    return store;
-}
+  return store;
+};
 
-export { Store, StoreProvider, createStore, useStore};
+export { Store, StoreProvider, createStore, useStore };
