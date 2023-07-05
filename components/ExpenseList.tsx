@@ -1,7 +1,7 @@
 import { AntDesign } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
 import { observer } from 'mobx-react-lite';
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, SafeAreaView } from 'react-native';
 import { FlatList } from 'react-native-gesture-handler';
 
@@ -22,6 +22,14 @@ const ExpenseList = () => {
     }[]
   >([]);
 
+  const getTotalBudget = useCallback(() => {
+    let totalBudget = 0;
+    expenseStore.expenses.forEach((expense) => {
+      totalBudget += expense.amount;
+    });
+    return totalBudget;
+  }, []);
+
   useEffect(() => {
     const expenseArray = Array.from(expenseStore.expenses.values());
     setExpenses(expenseArray);
@@ -34,7 +42,7 @@ const ExpenseList = () => {
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.header}>
-        <Text style={styles.totalExpenses}>Total Budget: $ </Text>
+        <Text style={styles.totalExpenses}>Total Budget: $ {getTotalBudget()}</Text>
         <TouchableOpacity onPress={navigateToExpenseForm} style={styles.addButton}>
           <AntDesign name="plus" size={24} color="white" />
         </TouchableOpacity>
