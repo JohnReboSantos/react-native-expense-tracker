@@ -23,6 +23,7 @@ const ExpenseItem = ({
       itemAmount: amount,
       itemName: name,
       itemDescription: description,
+      itemCategory: category,
       itemDate: date,
     });
   };

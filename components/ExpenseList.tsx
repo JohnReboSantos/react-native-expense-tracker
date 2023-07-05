@@ -14,7 +14,8 @@ const ExpenseList = () => {
   const [expenses, setExpenses] = useState({});
 
   useEffect(() => {
-    setExpenses(Array.from(expenseStore.expenses.values()));
+    const expenseArray = Array.from(expenseStore.expenses.values());
+    setExpenses(expenseArray);
   }, []);
 
   const navigateToExpenseForm = () => {

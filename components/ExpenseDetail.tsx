@@ -5,16 +5,17 @@ import React from 'react';
 import { Text, StyleSheet, SafeAreaView, TouchableOpacity } from 'react-native';
 
 const ExpenseDetail = ({ route }: any) => {
-  const { itemId, itemAmount, itemName, itemDescription, itemDate } = route.params;
+  const { itemId, itemAmount, itemName, itemDescription, itemCategory, itemDate } = route.params;
   const navigation = useNavigation();
 
   const navigateToEdit = () => {
     navigation.navigate('ExpenseEdit', {
-      id: itemId,
-      amount: itemAmount,
-      name: itemName,
-      description: itemDescription,
-      date: itemDate,
+      editId: itemId,
+      editAmount: itemAmount,
+      editName: itemName,
+      editDescription: itemDescription,
+      editCategory: itemCategory,
+      editDate: itemDate,
     });
   };
 

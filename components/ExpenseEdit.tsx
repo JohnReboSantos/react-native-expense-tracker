@@ -1,28 +1,180 @@
+import DateTimePicker, { DateTimePickerEvent } from '@react-native-community/datetimepicker';
 import { observer } from 'mobx-react-lite';
-import React from 'react';
-import { Text, SafeAreaView, StyleSheet, TouchableOpacity } from 'react-native';
+import React, { useState } from 'react';
+import {
+  TextInput,
+  View,
+  Platform,
+  Pressable,
+  Text,
+  SafeAreaView,
+  StyleSheet,
+  TouchableOpacity,
+} from 'react-native';
 
 import { useStore } from '../stores';
 
 const ExpenseEdit = ({ route }: any) => {
-  const { id, amount, name, description, date } = route.params;
+  const { editId, editAmount, editName, editDescription, editCategory, editDate } = route.params;
   const { expenseStore } = useStore();
-  const handleDelete = () => expenseStore.deleteExpense(id);
+  const handleDelete = () => expenseStore.deleteExpense(editId);
+  const [formData, setFormData] = useState({
+    amount: editAmount,
+    name: editName,
+    description: editDescription,
+    category: editCategory,
+    date: editDate,
+  });
+  const [selectedDate, setSelectedDate] = useState(new Date());
+  const [showPicker, setShowPicker] = useState(false);
+
+  const toggleDatepicker = () => {
+    setShowPicker(!showPicker);
+  };
+
+  const onChange = ({ type }: DateTimePickerEvent, chosenDate: Date | undefined) => {
+    if (type === 'set') {
+      setSelectedDate(chosenDate || new Date());
+
+      if (Platform.OS === 'android') {
+        toggleDatepicker();
+        setFormData({
+          ...formData,
+          date: selectedDate.toDateString() || new Date().toDateString(),
+        });
+      }
+    } else {
+      toggleDatepicker();
+    }
+  };
+
+  const confirmIOSDate = () => {
+    setFormData({ ...formData, date: selectedDate.toDateString() });
+    toggleDatepicker();
+  };
+
+  const onSubmit = () => {
+    if (formData.amount === 0) {
+      alert('Amount is required');
+      return;
+    }
+
+    if (formData.name.trim().length === 0) {
+      alert('Name is required');
+      return;
+    }
+
+    expenseStore.editExpense(
+      editId,
+      formData.amount,
+      formData.name,
+      formData.description,
+      formData.category,
+      formData.date
+    );
+
+    alert(
+      `Expense successfully added! Amount: ${formData.amount}. Name: ${formData.name}. Description: ${formData.description}. Category: ${formData.category}. Date: ${formData.date}`
+    );
+  };
   return (
     <SafeAreaView>
-      <Text>This is edit</Text>
-      <Text>Amount: $ {amount}</Text>
-      <Text>Name: {name}</Text>
-      <Text>Description: {description}</Text>
-      <Text>Date: {date}</Text>
+      <TextInput
+        style={styles.input}
+        placeholder="Amount"
+        value={formData.amount.toString()}
+        onChangeText={(e) => setFormData({ ...formData, amount: parseInt(e, 10) || 0 })}
+        keyboardType="numeric"
+      />
+      <TextInput
+        style={styles.input}
+        placeholder="Name"
+        value={formData.name}
+        onChangeText={(e) => setFormData({ ...formData, name: e })}
+      />
+      <TextInput
+        style={[styles.input, { height: 180 }]}
+        placeholder="Description"
+        multiline
+        value={formData.description}
+        onChangeText={(e) => setFormData({ ...formData, description: e })}
+      />
+      <TextInput
+        style={styles.input}
+        placeholder="Category"
+        value={formData.category}
+        onChangeText={(e) => setFormData({ ...formData, category: e })}
+      />
+      {showPicker && (
+        <DateTimePicker
+          mode="date"
+          display="spinner"
+          value={selectedDate}
+          onChange={onChange}
+          style={styles.datePicker}
+        />
+      )}
+
+      {showPicker && Platform.OS === 'ios' && (
+        <View style={{ flexDirection: 'row', justifyContent: 'space-around' }}>
+          <TouchableOpacity
+            style={[styles.button, styles.pickerButton, { backgroundColor: '#11182711' }]}
+            onPress={toggleDatepicker}>
+            <Text style={[styles.buttonText, { color: '#075985' }]}>Cancel</Text>
+          </TouchableOpacity>
+
+          <TouchableOpacity style={[styles.button, styles.pickerButton]} onPress={confirmIOSDate}>
+            <Text style={[styles.buttonText]}>Confirm</Text>
+          </TouchableOpacity>
+        </View>
+      )}
+
+      {!showPicker && (
+        <Pressable onPress={toggleDatepicker}>
+          <TextInput
+            style={[styles.input, { color: formData.date === '' ? 'gray' : 'black' }]}
+            editable={false}
+            onPressIn={toggleDatepicker}
+            placeholder="Date"
+            value={formData.date}
+            onChangeText={(e) => setFormData({ ...formData, date: e })}
+          />
+        </Pressable>
+      )}
+      <TouchableOpacity style={styles.button} onPress={onSubmit}>
+        <Text>Edit</Text>
+      </TouchableOpacity>
       <TouchableOpacity style={styles.deleteButton} onPress={handleDelete}>
-        <Text style={styles.buttonText}>Delete</Text>
+        <Text style={styles.deleteText}>Delete</Text>
       </TouchableOpacity>
     </SafeAreaView>
   );
 };
 
 const styles = StyleSheet.create({
+  input: {
+    height: 40,
+    margin: 12,
+    borderWidth: 1,
+    padding: 10,
+  },
+  button: {
+    alignItems: 'center',
+    backgroundColor: '#DDDDDD',
+    padding: 10,
+  },
+  buttonText: {
+    fontSize: 14,
+    fontWeight: '500',
+    color: '#fff',
+  },
+  datePicker: {
+    height: 120,
+    marginTop: -10,
+  },
+  pickerButton: {
+    paddingHorizontal: 20,
+  },
   deleteButton: {
     backgroundColor: 'red',
     paddingVertical: 12,
@@ -30,7 +182,7 @@ const styles = StyleSheet.create({
     borderRadius: 8,
     alignItems: 'center',
   },
-  buttonText: {
+  deleteText: {
     color: 'white',
     fontSize: 16,
     fontWeight: 'bold',

@@ -35,6 +35,7 @@ export default class ExpenseStore extends Model({
       return;
     }
     const expense = this.expenses.get(id);
+    console.log('unedited expense', expense);
     if (expense) {
       expense.amount = amount;
       expense.name = name;
@@ -42,6 +43,7 @@ export default class ExpenseStore extends Model({
       expense.category = category;
       expense.date = date;
     }
+    console.log('edited expense', expense);
   };
 
   @modelAction
