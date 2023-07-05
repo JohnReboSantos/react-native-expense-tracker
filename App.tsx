@@ -5,6 +5,7 @@ import { NavigationContainer } from '@react-navigation/native';
 import * as React from 'react';
 
 import ExpenseDetail from './components/ExpenseDetail';
+import ExpenseEdit from './components/ExpenseEdit';
 import ExpenseForm from './components/ExpenseForm';
 import ExpenseList from './components/ExpenseList';
 import Loading from './components/Loading';
@@ -27,6 +28,7 @@ export default function App() {
           <Drawer.Screen name="ExpenseForm" component={ExpenseForm} />
           <Drawer.Screen name="ExpenseList" component={ExpenseList} />
           <Drawer.Screen name="ExpenseDetail" component={ExpenseDetail} />
+          <Drawer.Screen name="ExpenseEdit" component={ExpenseEdit} />
         </Drawer.Navigator>
         {/* <Stack.Navigator>
           <Stack.Screen name="ExpenseList" component={ExpenseList} />

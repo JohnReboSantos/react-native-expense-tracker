@@ -1,12 +1,27 @@
+import { Ionicons } from '@expo/vector-icons';
+import { useNavigation } from '@react-navigation/native';
 import { observer } from 'mobx-react-lite';
 import React from 'react';
-import { Text, StyleSheet, SafeAreaView } from 'react-native';
+import { Text, StyleSheet, SafeAreaView, TouchableOpacity } from 'react-native';
 
 const ExpenseDetail = ({ route }: any) => {
   const { itemAmount, itemName, itemDescription, itemDate } = route.params;
+  const navigation = useNavigation();
+
+  const navigateToEdit = () => {
+    navigation.navigate('ExpenseEdit', {
+      itemAmount,
+      itemName,
+      itemDescription,
+      itemDate,
+    });
+  };
 
   return (
     <SafeAreaView style={styles.container}>
+      <TouchableOpacity style={styles.editButton} onPress={navigateToEdit}>
+        <Ionicons name="pencil" size={24} color="black" />
+      </TouchableOpacity>
       <Text style={styles.itemAmount}>Amount: $ {itemAmount}</Text>
       <Text style={styles.itemName}>Name: {itemName}</Text>
       <Text style={styles.itemDescription}>Description: {itemDescription}</Text>
@@ -36,6 +51,11 @@ const styles = StyleSheet.create({
   itemDate: {
     fontSize: 12,
     color: '#888',
+  },
+  editButton: {
+    alignSelf: 'flex-end',
+    padding: 8,
+    borderRadius: 8,
   },
 });
 

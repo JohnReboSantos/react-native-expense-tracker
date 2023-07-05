@@ -105,7 +105,7 @@ const ExpenseForm = () => {
         onChangeText={(e) => setFormData({ ...formData, name: e })}
       />
       <TextInput
-        style={[styles.input, { height: 80 }]}
+        style={[styles.input, { height: 180 }]}
         placeholder="Description"
         multiline
         value={formData.description}
