@@ -23,7 +23,7 @@ export default class ExpenseStore extends Model({
   };
 
   @modelAction
-  deleteTodo = (id: string) => {
+  deleteExpense = (id: string) => {
     if (!this.expenses.has(id)) {
       return;
     }

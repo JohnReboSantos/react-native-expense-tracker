@@ -19,6 +19,7 @@ const ExpenseItem = ({
   const navigation = useNavigation();
   const navigateToDetail = () => {
     navigation.navigate('ExpenseDetail', {
+      itemId: id,
       itemAmount: amount,
       itemName: name,
       itemDescription: description,
