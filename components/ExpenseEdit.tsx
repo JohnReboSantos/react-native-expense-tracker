@@ -1,4 +1,5 @@
 import DateTimePicker, { DateTimePickerEvent } from '@react-native-community/datetimepicker';
+import { useNavigation } from '@react-navigation/native';
 import { observer } from 'mobx-react-lite';
 import React, { useState } from 'react';
 import {
@@ -10,6 +11,7 @@ import {
   SafeAreaView,
   StyleSheet,
   TouchableOpacity,
+  Alert,
 } from 'react-native';
 
 import { useStore } from '../stores';
@@ -17,7 +19,6 @@ import { useStore } from '../stores';
 const ExpenseEdit = ({ route }: any) => {
   const { editId, editAmount, editName, editDescription, editCategory, editDate } = route.params;
   const { expenseStore } = useStore();
-  const handleDelete = () => expenseStore.deleteExpense(editId);
   const [formData, setFormData] = useState({
     amount: editAmount,
     name: editName,
@@ -27,6 +28,7 @@ const ExpenseEdit = ({ route }: any) => {
   });
   const [selectedDate, setSelectedDate] = useState(new Date());
   const [showPicker, setShowPicker] = useState(false);
+  const navigation = useNavigation();
 
   const toggleDatepicker = () => {
     setShowPicker(!showPicker);
@@ -74,9 +76,41 @@ const ExpenseEdit = ({ route }: any) => {
     );
 
     alert(
-      `Expense successfully added! Amount: ${formData.amount}. Name: ${formData.name}. Description: ${formData.description}. Category: ${formData.category}. Date: ${formData.date}`
+      `Expense successfully edited! Amount: ${formData.amount}. Name: ${formData.name}. Description: ${formData.description}. Category: ${formData.category}. Date: ${formData.date}`
+    );
+
+    navigation.navigate('ExpenseDetail', {
+      itemId: editId,
+      itemAmount: formData.amount,
+      itemName: formData.name,
+      itemDescription: formData.description,
+      itemCategory: formData.category,
+      itemDate: formData.date,
+    });
+  };
+
+  const handleDelete = () => {
+    Alert.alert(
+      'Confirmation',
+      'Are you sure you want to delete this expense?',
+      [
+        {
+          text: 'Cancel',
+          style: 'cancel',
+        },
+        {
+          text: 'Delete',
+          style: 'destructive',
+          onPress: () => {
+            expenseStore.deleteExpense(editId);
+            navigation.navigate('ExpenseList');
+          },
+        },
+      ],
+      { cancelable: true }
     );
   };
+
   return (
     <SafeAreaView>
       <TextInput

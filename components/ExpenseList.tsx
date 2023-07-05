@@ -31,8 +31,9 @@ const ExpenseList = () => {
   }, []);
 
   useEffect(() => {
-    const expenseArray = Array.from(expenseStore.expenses.values());
-    setExpenses(expenseArray);
+    setExpenses(Array.from(expenseStore.expenses.values()));
+    console.log('Array of expenses:', Array.from(expenseStore.expenses.values()));
+    console.log('expenses state:', expenses);
   }, []);
 
   const navigateToExpenseForm = () => {
@@ -51,7 +52,7 @@ const ExpenseList = () => {
         <Text> Create your first entry! </Text>
       ) : (
         <FlatList
-          data={Array.from(expenseStore.expenses.values())}
+          data={expenses}
           renderItem={({ item }) => (
             <ExpenseItem
               id={item.id}
