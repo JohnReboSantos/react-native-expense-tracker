@@ -36,10 +36,11 @@ const ExpenseEdit = ({ route }: any) => {
 
   const onChange = ({ type }: DateTimePickerEvent, chosenDate: Date | undefined) => {
     if (type === 'set') {
-      setSelectedDate(chosenDate || new Date());
+      const currentDate = chosenDate || new Date();
+      setSelectedDate(currentDate);
       setFormData({
         ...formData,
-        date: selectedDate.toDateString(),
+        date: currentDate.toDateString(),
       });
 
       if (Platform.OS === 'android') {
