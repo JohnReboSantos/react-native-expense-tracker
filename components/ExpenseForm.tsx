@@ -24,18 +24,15 @@ const ExpenseForm = () => {
 
   const onChange = ({ type }: DateTimePickerEvent, chosenDate: Date | undefined) => {
     if (type === 'set') {
-      setSelectedDate(chosenDate || new Date());
+      const currentDate = chosenDate || new Date();
+      setSelectedDate(currentDate);
       setFormData({
         ...formData,
-        date: selectedDate.toDateString(),
+        date: currentDate.toDateString(),
       });
 
       if (Platform.OS === 'android') {
         toggleDatepicker();
-        // setFormData({
-        //   ...formData,
-        //   date: selectedDate.toDateString(),
-        // });
       }
     } else {
       toggleDatepicker();
@@ -153,7 +150,6 @@ const ExpenseForm = () => {
             onPressIn={toggleDatepicker}
             placeholder="Date"
             value={formData.date}
-            onChangeText={(e) => setFormData({ ...formData, date: e })}
           />
         </Pressable>
       )}

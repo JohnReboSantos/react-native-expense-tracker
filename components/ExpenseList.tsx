@@ -1,5 +1,6 @@
 import { AntDesign } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
+import { reaction } from 'mobx';
 import { observer } from 'mobx-react-lite';
 import React, { useCallback, useEffect, useState } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, SafeAreaView } from 'react-native';
@@ -31,9 +32,21 @@ const ExpenseList = () => {
   }, []);
 
   useEffect(() => {
-    setExpenses(Array.from(expenseStore.expenses.values()));
-    console.log('Array of expenses:', Array.from(expenseStore.expenses.values()));
-    console.log('expenses state:', expenses);
+    // Update expenses state when expenseStore changes
+    const dispose = reaction(
+      () =>
+        Array.from(expenseStore.expenses.values()).sort(
+          (a, b) => new Date(b.date).getTime() - new Date(a.date).getTime()
+        ),
+      (newExpenses) => {
+        setExpenses(newExpenses);
+      }
+    );
+
+    return () => {
+      // Cleanup the reaction when the component unmounts
+      dispose();
+    };
   }, []);
 
   const navigateToExpenseForm = () => {
