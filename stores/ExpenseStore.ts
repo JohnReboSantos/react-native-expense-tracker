@@ -1,8 +1,10 @@
+import { polyfillWebCrypto } from 'expo-standard-web-crypto';
 import { Model, model, modelAction, objectMap, prop } from 'mobx-keystone';
-import 'react-native-get-random-values';
 import { v4 as uuidv4 } from 'uuid';
 
 import Expense from '../models/Expense';
+
+polyfillWebCrypto();
 
 @model('react-native-expense-tracker/ExpenseStore')
 export default class ExpenseStore extends Model({
